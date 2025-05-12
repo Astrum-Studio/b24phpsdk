@@ -23,8 +23,6 @@ class RequestDelay
     {
         if (self::$instance === null) {
             self::$instance = new self($delayMs);
-        } else {
-            self::$instance->setDelay($delayMs);
         }
         
         return self::$instance;
