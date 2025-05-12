@@ -58,7 +58,7 @@ class Core implements CoreInterface
 
         // add delay between requests
         if (RequestDelay::instanceIsCreated()) {
-            $this->requestDelay = RequestDelay::getInstance();
+            $this->requestDelay = RequestDelay::init();
             $this->requestDelay->wait();
         }
 

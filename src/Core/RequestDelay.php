@@ -31,19 +31,6 @@ class RequestDelay
     }
 
     /**
-     * Get the current instance
-     * @return self
-     */
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        
-        return self::$instance;
-    }
-
-    /**
      * Check if the instance is created
      * @return bool
      */
