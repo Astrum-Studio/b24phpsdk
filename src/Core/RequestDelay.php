@@ -11,8 +11,9 @@ namespace Bitrix24\SDK\Core;
 class RequestDelay
 {
     private static ?self $instance = null;
-    private int $lastRequestTime = 0;
     private int $delayMs;
+    private ?string $lastMethod = null;
+    private string $currentMethod = '';
 
     /**
      * Initialize the delay with specified milliseconds
@@ -50,15 +51,10 @@ class RequestDelay
      */
     public function wait(): void
     {
-        $currentTime = (int)(microtime(true) * 1000);
-        $timeSinceLastRequest = $currentTime - $this->lastRequestTime;
-
-        if ($timeSinceLastRequest < $this->delayMs) {
-            $sleepTime = $this->delayMs - $timeSinceLastRequest;
-            usleep($sleepTime * 1000); // Convert milliseconds to microseconds
+        if ($this->lastMethod === null) return;
+        if ($this->lastMethod === $this->currentMethod) {
+            usleep($this->delayMs * 1000); 
         }
-
-        $this->lastRequestTime = (int)(microtime(true) * 1000);
     }
 
     /**
@@ -77,6 +73,16 @@ class RequestDelay
     public function getDelay(): int
     {
         return $this->delayMs;
+    }
+
+    public function getLastMethod()
+    {
+        return $this->lastMethod;
+    }
+
+    public function setMethod(string $method)
+    {
+        $this->currentMethod = $method;
     }
 
     /**
