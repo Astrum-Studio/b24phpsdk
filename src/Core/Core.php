@@ -31,12 +31,15 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Core implements CoreInterface
 {
+    private RequestDelay $requestDelay;
+
     public function __construct(
         protected ApiClientInterface       $apiClient,
         protected ApiLevelErrorHandler     $apiLevelErrorHandler,
         protected EventDispatcherInterface $eventDispatcher,
-        protected LoggerInterface          $logger)
-    {
+        protected LoggerInterface          $logger,
+    ) {
+        $this->requestDelay = $requestDelay ?? RequestDelay::getInstance();
     }
 
     /**
@@ -52,6 +55,12 @@ class Core implements CoreInterface
                 'parameters' => $parameters,
             ]
         );
+
+        // add delay between requests
+        if (RequestDelay::instanceIsCreated()) {
+            $this->requestDelay = RequestDelay::getInstance();
+            $this->requestDelay->wait();
+        }
 
         $response = null;
         try {
