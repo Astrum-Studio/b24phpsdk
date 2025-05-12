@@ -31,16 +31,14 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Core implements CoreInterface
 {
-    private RequestDelay $requestDelay;
+    private ?RequestDelay $requestDelay = null;
 
     public function __construct(
         protected ApiClientInterface       $apiClient,
         protected ApiLevelErrorHandler     $apiLevelErrorHandler,
         protected EventDispatcherInterface $eventDispatcher,
         protected LoggerInterface          $logger,
-    ) {
-        $this->requestDelay = $requestDelay ?? RequestDelay::getInstance();
-    }
+    ) {}
 
     /**
      * @throws BaseException
